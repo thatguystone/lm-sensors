@@ -548,7 +548,7 @@ function pwmenable()
 		fi
 		# enable manual control by fancontrol
 		echo 1 > $ENABLE 2> /dev/null
-		if [ $? -ne 0 ]
+		if [ "$(cat $ENABLE)" -ne 1 ]
 		then
 			return 1
 		fi
