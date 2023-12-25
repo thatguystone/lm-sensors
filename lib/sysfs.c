@@ -752,7 +752,6 @@ static char* realpath_no_symlink(const char *restrict path,
 				 char *restrict resolved_path)
 {
 	struct stat st;
-	int ret;
 
 	if (lstat(path, &st) < 0)
 		return NULL;
