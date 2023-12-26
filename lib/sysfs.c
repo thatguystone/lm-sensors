@@ -437,11 +437,11 @@ static int sensors_compute_max_sf(void)
 
 static int sensors_get_attr_mode(const char *device, const char *attr)
 {
-	char path[NAME_MAX];
+	char path[NAME_MAX + 2];
 	struct stat st;
 	int mode = 0;
 
-	snprintf(path, NAME_MAX, "%s/%s", device, attr);
+	snprintf(path, NAME_MAX + 2, "%s/%s", device, attr);
 	if (!stat(path, &st)) {
 		if (st.st_mode & S_IRUSR)
 			mode |= SENSORS_MODE_R;
