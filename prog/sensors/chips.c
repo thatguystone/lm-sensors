@@ -97,7 +97,7 @@ void print_chip_json(const sensors_chip_name *name)
 				"%s!\n", feature->name);
 			continue;
 		}
-		if (cnt > 0)
+		if (cnt++)
 			printf(",\n");
 		printf("      \"%s\":{\n", label);
 
@@ -114,22 +114,21 @@ void print_chip_json(const sensors_chip_name *name)
 						sub->name,
 						sensors_strerror(err));
 				} else {
-					if (subCnt > 0)
+					if (subCnt++)
 						printf(",\n");
 					if (is_temp && fahrenheit)
 						val = deg_ctof(val);
 					printf("         \"%s\": %.3f", sub->name, val);
-					subCnt++;
 				}
 
 			} else {
-				printf("(%s)", label);
-				subCnt++;
+				if (subCnt++)
+					printf(",\n");
+				printf("         \"%s\": NaN", sub->name);
 			}
 		}
 		free(label);
 		printf("\n      }");
-		cnt++;
 	}
 	if (cnt > 0)
 		printf("\n");
