@@ -177,24 +177,22 @@ static void do_a_print(const sensors_chip_name *name)
 
 static void do_a_json_print(const sensors_chip_name *name)
 {
-	printf("   \"%s\":{\n", sprintf_chip_name(name));
+	printf("\"%s\":{", sprintf_chip_name(name));
 	if (!hide_adapter) {
 		int a = 0;
 		const char *adap = sensors_get_adapter_name(&name->bus);
 		if (adap) {
-			printf("      \"Adapter\": \"%s\"", adap);
+			printf("\"Adapter\":\"%s\"", adap);
 			/* only print trailing ',' if there are features to list */
 			if (sensors_get_features(name, &a) != NULL) {
-				printf(",\n");
-			} else {
-				printf("\n");
+				printf(",");
 			}
 		} else {
 			fprintf(stderr, "Can't get adapter name\n");
 		}
 	}
 	print_chip_json(name);
-	printf("   }");
+	printf("}");
 }
 
 /* returns 1 on error */
@@ -229,7 +227,7 @@ static int do_the_real_work(const sensors_chip_name *match, int *err)
 	int cnt = 0;
 
 	if (do_json)
-		printf("{\n");
+		printf("{");
 	chip_nr = 0;
 	while ((chip = sensors_get_detected_chips(match, &chip_nr))) {
 		if (do_sets) {
@@ -238,7 +236,7 @@ static int do_the_real_work(const sensors_chip_name *match, int *err)
 		} else {
 			if (do_json) {
 				if (cnt > 0)
-					printf(",\n");
+					printf(",");
 				do_a_json_print(chip);
 			} else {
 				do_a_print(chip);
@@ -247,7 +245,7 @@ static int do_the_real_work(const sensors_chip_name *match, int *err)
 		cnt++;
 	}
 	if (do_json)
-		printf("\n}\n");
+		printf("}\n");
 	return cnt;
 }
 

@@ -98,8 +98,8 @@ void print_chip_json(const sensors_chip_name *name)
 			continue;
 		}
 		if (cnt++)
-			printf(",\n");
-		printf("      \"%s\":{\n", label);
+			printf(",");
+		printf("\"%s\":{", label);
 
 		b = 0;
 		subCnt = 0;
@@ -115,23 +115,21 @@ void print_chip_json(const sensors_chip_name *name)
 						sensors_strerror(err));
 				} else {
 					if (subCnt++)
-						printf(",\n");
+						printf(",");
 					if (is_temp && fahrenheit)
 						val = deg_ctof(val);
-					printf("         \"%s\": %.3f", sub->name, val);
+					printf("\"%s\":%.3f", sub->name, val);
 				}
 
 			} else {
 				if (subCnt++)
-					printf(",\n");
-				printf("         \"%s\": NaN", sub->name);
+					printf(",");
+				printf("\"%s\":NaN", sub->name);
 			}
 		}
 		free(label);
-		printf("\n      }");
+		printf("}");
 	}
-	if (cnt > 0)
-		printf("\n");
 }
 
 static const char hyst_str[] = "hyst";
