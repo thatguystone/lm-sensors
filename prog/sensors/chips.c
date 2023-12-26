@@ -36,7 +36,7 @@ static void scale_value(double *value, const char **prefixstr);
 
 static inline double deg_ctof(double cel)
 {
-	return cel * (9.0F / 5.0F) + 32.0F;
+	return cel * (9.0 / 5.0) + 32.0;
 }
 
 void print_chip_raw(const sensors_chip_name *name)
