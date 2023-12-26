@@ -99,11 +99,27 @@ void print_chip_json(const sensors_chip_name *name)
 		}
 		if (cnt++)
 			printf(",");
-		printf("\"%s\":{", label);
+		subCnt = 0;
+		if (new_json) {
+			printf("\"%s\":{", feature->name);
+			if (strcmp(label, feature->name)) {
+				if (subCnt++)
+					printf(",");
+				printf("\"label\":\"%s\"", label);
+			}
+		} else
+			printf("\"%s\":{", label);
 
 		b = 0;
-		subCnt = 0;
 		while ((sub = sensors_get_all_subfeatures(name, feature, &b))) {
+			char *fname = sub->name;
+			if (new_json) {
+				if (strlen(feature->name) < strlen(sub->name)) {
+					fname += strlen(feature->name);
+					if (*fname == '_') /* FIXME some sensors use other separator */
+						fname++;
+				}
+			}
 			if (sub->flags & SENSORS_MODE_R) {
 				is_temp = !strcmp("°C", sensors_get_quantity(sub->type)->unit);
 
@@ -118,13 +134,50 @@ void print_chip_json(const sensors_chip_name *name)
 						printf(",");
 					if (is_temp && fahrenheit)
 						val = deg_ctof(val);
-					printf("\"%s\":%.3f", sub->name, val);
+					if (new_json) {
+						const char *unit = sensors_get_quantity(sub->type)->unit;
+						const char *quantity = sensors_get_quantity(sub->type)->quantity;
+						int quaCnt = 0;
+
+						printf("\"%s\":{", fname);
+
+						if (is_temp && fahrenheit)
+							unit = "°F";
+						if (strrchr(quantity, ' '))
+							quantity = strrchr(quantity, ' ') + 1;
+
+						if (sub->type == SENSORS_SUBFEATURE_TEMP_TYPE) {
+							if (quaCnt++)
+								printf(",");
+							printf("\"label\":\"%s\"", sensors_temp_type_name(val));
+						}
+
+						if (strlen(quantity)) {
+							if (quaCnt++)
+								printf(",");
+							printf("\"quantity\":\"%s\"", quantity);
+						}
+
+						if (strlen(unit)) {
+							if (quaCnt++)
+								printf(",");
+							printf("\"unit\":\"%s\"", unit);
+						}
+
+						if (quaCnt++)
+							printf(",");
+						printf("\"value\":%.16g", val);
+						printf("}");
+
+					} else {
+						printf("\"%s\":%f", fname, val);
+					}
 				}
 
 			} else {
 				if (subCnt++)
 					printf(",");
-				printf("\"%s\":NaN", sub->name);
+				printf("\"%s\":NaN", fname);
 			}
 		}
 		free(label);

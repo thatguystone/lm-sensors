@@ -42,6 +42,7 @@
 #define VERSION			LM_VERSION
 
 static int do_sets, do_raw, do_json, hide_adapter;
+int new_json;
 
 int fahrenheit;
 char degstr[5]; /* store the correct string to print degrees */
@@ -296,12 +297,13 @@ int main(int argc, char *argv[])
 
 	do_raw = 0;
 	do_json = 0;
+	new_json = 0;
 	do_sets = 0;
 	do_bus_list = 0;
 	hide_adapter = 0;
 	allow_no_sensors = 0;
 	while (1) {
-		c = getopt_long(argc, argv, "hsvfAc:ujn", long_opts, NULL);
+		c = getopt_long(argc, argv, "hsvfAc:ujJn", long_opts, NULL);
 		if (c == EOF)
 			break;
 		switch(c) {
@@ -332,6 +334,10 @@ int main(int argc, char *argv[])
 			break;
 		case 'j':
 			do_json = 1;
+			break;
+		case 'J':
+			do_json = 1;
+			new_json = 1;
 			break;
 		case 'B':
 			do_bus_list = 1;
