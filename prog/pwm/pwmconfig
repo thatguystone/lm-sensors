@@ -29,7 +29,7 @@
 #
 #
 
-LM_VERSION='3.6.2'
+LM_VERSION='3.6.2+git'
 PIDFILE="/run/fancontrol.pid"
 USERDIR=$(pwd)
 
