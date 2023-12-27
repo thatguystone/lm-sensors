@@ -905,6 +905,7 @@ static void print_chip_freq(const sensors_chip_name *name,
 	const sensors_subfeature *sf;
 	double val;
 	char *label;
+	const char *unit;
 
 	if (!(label = sensors_get_label(name, feature))) {
 		fprintf(stderr, "ERROR: Can't get label of feature %s!\n",
@@ -917,7 +918,8 @@ static void print_chip_freq(const sensors_chip_name *name,
 	sf = sensors_get_subfeature(name, feature,
 				    SENSORS_SUBFEATURE_FREQ_INPUT);
 	if (sf && get_input_value(name, sf, &val) == 0) {
-		printf("%4.0f %s", val, "MHz");
+		scale_value(&val, &unit);
+		printf("%4.0f %sHz%*s", val, unit, 2 - (int)strlen(unit), "");
 	} else {
 		printf("     N/A  ");
 	}

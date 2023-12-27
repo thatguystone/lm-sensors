@@ -163,7 +163,6 @@ int get_type_scaling(sensors_subfeature_type type)
 		return 1000;
 	case SENSORS_SUBFEATURE_POWER_AVERAGE:
 	case SENSORS_SUBFEATURE_ENERGY_INPUT:
-	case SENSORS_SUBFEATURE_FREQ_INPUT:
 		return 1000000;
 	}
 
