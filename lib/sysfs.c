@@ -148,6 +148,8 @@ int get_type_scaling(sensors_subfeature_type type)
 	case SENSORS_SUBFEATURE_VID:
 	case SENSORS_SUBFEATURE_TEMP_OFFSET:
 		return 1000;
+	case SENSORS_SUBFEATURE_PWM_IO:
+		return 2.55;
 	default:
 		break;
 	}

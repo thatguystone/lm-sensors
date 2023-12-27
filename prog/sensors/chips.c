@@ -783,7 +783,7 @@ static void print_chip_pwm(const sensors_chip_name *name,
 	sfio = sensors_get_subfeature(name, feature,
 				      SENSORS_SUBFEATURE_PWM_IO);
 	if (sfio && !get_input_value(name, sfio, &val))
-		printf("    %3.0f%%", val / 2.55);
+		printf("    %3.0f%%", val);
 	else
 		printf("     N/A");
 
