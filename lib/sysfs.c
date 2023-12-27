@@ -141,6 +141,17 @@ char sensors_sysfs_mount[NAME_MAX];
 static
 int get_type_scaling(sensors_subfeature_type type)
 {
+	/* Multipliers for second class subfeatures
+	   that need their own multiplier */
+	switch (type) {
+	case SENSORS_SUBFEATURE_POWER_AVERAGE_INTERVAL:
+	case SENSORS_SUBFEATURE_VID:
+	case SENSORS_SUBFEATURE_TEMP_OFFSET:
+		return 1000;
+	default:
+		break;
+	}
+
 	/* Multipliers for subfeatures */
 	switch (type & 0xFF80) {
 	case SENSORS_SUBFEATURE_IN_INPUT:
@@ -157,16 +168,7 @@ int get_type_scaling(sensors_subfeature_type type)
 		return 1000000;
 	}
 
-	/* Multipliers for second class subfeatures
-	   that need their own multiplier */
-	switch (type) {
-	case SENSORS_SUBFEATURE_POWER_AVERAGE_INTERVAL:
-	case SENSORS_SUBFEATURE_VID:
-	case SENSORS_SUBFEATURE_TEMP_OFFSET:
-		return 1000;
-	default:
-		return 1;
-	}
+	return 1;
 }
 
 static
