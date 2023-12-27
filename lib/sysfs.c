@@ -169,6 +169,73 @@ int get_type_scaling(sensors_subfeature_type type)
 	return 1;
 }
 
+static sensors_quantity none = {"", ""};
+static sensors_quantity bool = {"boolean", ""};
+static sensors_quantity voltage = {"voltage", "V"};
+static sensors_quantity rpm = {"rotation speed", "RPM"};
+static sensors_quantity temperature = {"temperature", "°C"};
+static sensors_quantity power = {"power", "W"};
+static sensors_quantity interval = {"time interval", "s"};
+static sensors_quantity energy = {"energy", "J"};
+static sensors_quantity current = {"electric current", "A"};
+static sensors_quantity humidity = {"humidity", "%RH"};
+static sensors_quantity pwm = {"pwm", "%"};
+static sensors_quantity freq = {"frequency", "Hz"};
+
+const sensors_quantity* sensors_get_quantity(sensors_subfeature_type type)
+{
+	/* Second class subfeatures
+	   that need their own handling */
+	switch (type) {
+		case SENSORS_SUBFEATURE_FAN_DIV:
+		case SENSORS_SUBFEATURE_FAN_PULSES:
+		case SENSORS_SUBFEATURE_TEMP_TYPE:
+		case SENSORS_SUBFEATURE_TEMP_OFFSET:
+		case SENSORS_SUBFEATURE_PWM_MODE:
+			return &none;
+		case SENSORS_SUBFEATURE_POWER_AVERAGE_INTERVAL:
+			return &interval;
+		case SENSORS_SUBFEATURE_PWM_FREQ:
+			return &freq;
+		default:
+			break;
+	}
+
+	/* Generic subfeatures groups */
+	switch (type & 0xFF80) {
+		case SENSORS_SUBFEATURE_IN_ALARM:
+		case SENSORS_SUBFEATURE_FAN_ALARM:
+		case SENSORS_SUBFEATURE_TEMP_ALARM:
+		case SENSORS_SUBFEATURE_POWER_AVERAGE_INTERVAL:
+		case SENSORS_SUBFEATURE_CURR_ALARM:
+		case SENSORS_SUBFEATURE_PWM_ENABLE:
+		case SENSORS_SUBFEATURE_INTRUSION_ALARM:
+		case SENSORS_SUBFEATURE_BEEP_ENABLE:
+			return &bool;
+		case SENSORS_SUBFEATURE_VID: /* reported in mV and scaled */
+		case SENSORS_SUBFEATURE_IN_INPUT:
+			return &voltage;
+		case SENSORS_SUBFEATURE_FAN_INPUT:
+			return &rpm;
+		case SENSORS_SUBFEATURE_TEMP_INPUT:
+			return &temperature;
+		case SENSORS_SUBFEATURE_POWER_AVERAGE:
+			return &power;
+		case SENSORS_SUBFEATURE_ENERGY_INPUT:
+			return &energy;
+		case SENSORS_SUBFEATURE_CURR_INPUT:
+			return &current;
+		case SENSORS_SUBFEATURE_HUMIDITY_INPUT:
+			return &humidity;
+		case SENSORS_SUBFEATURE_PWM_IO:
+			return &pwm;
+		case SENSORS_SUBFEATURE_FREQ_INPUT:
+			return &freq;
+	}
+
+	return &none;
+}
+
 static
 char *get_feature_name(sensors_feature_type ftype, char *sfname)
 {

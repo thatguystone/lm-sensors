@@ -269,6 +269,13 @@ typedef enum sensors_subfeature_type {
 	SENSORS_SUBFEATURE_UNKNOWN = INT_MAX,
 } sensors_subfeature_type;
 
+typedef struct sensors_quantity {
+	const char * quantity;
+	const char * unit;
+} sensors_quantity;
+
+const sensors_quantity *sensors_get_quantity(sensors_subfeature_type) __attribute__ ((const));
+
 /* Data about a single chip feature (or category leader) */
 struct sensors_feature {
 	char *name;
