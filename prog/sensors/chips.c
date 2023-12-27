@@ -409,13 +409,7 @@ static void print_chip_temp(const sensors_chip_name *name,
 		if (sens > 1000)
 			sens = 4;
 
-		printf("  sensor = %s", sens == 0 ? "disabled" :
-		       sens == 1 ? "CPU diode" :
-		       sens == 2 ? "transistor" :
-		       sens == 3 ? "thermal diode" :
-		       sens == 4 ? "thermistor" :
-		       sens == 5 ? "AMD AMDSI" :
-		       sens == 6 ? "Intel PECI" : "unknown");
+		printf("  sensor = %s", sensors_temp_type_name(sens));
 	}
 	printf("\n");
 }

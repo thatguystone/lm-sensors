@@ -276,6 +276,25 @@ typedef struct sensors_quantity {
 
 const sensors_quantity *sensors_get_quantity(sensors_subfeature_type) __attribute__ ((const));
 
+static inline const char *sensors_temp_type_name(int sens)
+{
+	/* older kernels / drivers sometimes report a beta value for
+	   thermistors */
+	if (sens > 1000)
+		sens = 4;
+
+	switch (sens) {
+		case 0: return "disabled";
+		case 1: return "CPU diode";
+		case 2: return "transistor";
+		case 3: return "thermal diode";
+		case 4: return "thermistor";
+		case 5: return "AMD AMDSI";
+		case 6: return "Intel PECI";
+		default: return "unknown";
+	}
+}
+
 /* Data about a single chip feature (or category leader) */
 struct sensors_feature {
 	char *name;
