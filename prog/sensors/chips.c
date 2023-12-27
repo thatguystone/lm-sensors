@@ -60,7 +60,7 @@ void print_chip_raw(const sensors_chip_name *name)
 		b = 0;
 		while ((sub = sensors_get_all_subfeatures(name, feature, &b))) {
 			if (sub->flags & SENSORS_MODE_R) {
-				is_temp = feature->type == SENSORS_FEATURE_TEMP;
+				is_temp = !strcmp("°C", sensors_get_quantity(sub->type)->unit);
 
 				if ((err = sensors_get_value(name, sub->number,
 							     &val)))
@@ -105,7 +105,7 @@ void print_chip_json(const sensors_chip_name *name)
 		subCnt = 0;
 		while ((sub = sensors_get_all_subfeatures(name, feature, &b))) {
 			if (sub->flags & SENSORS_MODE_R) {
-				is_temp = feature->type == SENSORS_FEATURE_TEMP;
+				is_temp = !strcmp("°C", sensors_get_quantity(sub->type)->unit);
 
 				if ((err = sensors_get_value(name, sub->number,
 							     &val))) {
