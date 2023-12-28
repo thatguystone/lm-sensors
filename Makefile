@@ -193,6 +193,11 @@ endif
 MANPAGES := $(LIBMAN3FILES) $(LIBMAN5FILES) $(PROGDETECTMAN8FILES) $(PROGDUMPMAN8FILES) \
             $(PROGSENSORSMAN1FILES) $(PROGPWMMAN8FILES) prog/sensord/sensord.8
 
+check:: test
+
+test:: lib/test/test-scanner
+	cd lib/test ; ./test-scanner.pl
+
 user ::
 user_install::
 	@echo "*** Important notes:"
