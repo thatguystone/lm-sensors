@@ -63,8 +63,6 @@ DATADIR := $(PREFIX)/share
 # ZSH completion files will be installed.
 ZSHCOMPDIR := $(DATADIR)/zsh/site-functions
 
-EXLDFLAGS := -Wl,-rpath,$(LIBDIR)
-
 # You should not need to change this. It is the directory into which the
 # executable program files will be installed. BINDIR for programs that are
 # also useful for normal users, SBINDIR for programs that can only be run
@@ -170,6 +168,10 @@ ARCPPFLAGS := -DETCDIR="\"$(ETCDIR)\"" $(ALL_CPPFLAGS)
 ARCFLAGS := $(ALL_CFLAGS)
 LIBCPPFLAGS := -DETCDIR="\"$(ETCDIR)\"" $(ALL_CPPFLAGS)
 LIBCFLAGS := -fpic -D_REENTRANT $(ALL_CFLAGS)
+
+ALL_LDFLAGS := $(LDFLAGS)
+
+EXLDFLAGS := -Wl,-rpath,$(LIBDIR) $(ALL_LDFLAGS)
 
 .PHONY: all user clean install user_install uninstall user_uninstall
 
