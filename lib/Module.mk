@@ -85,11 +85,8 @@ $(MODULE_DIR)/$(LIBSTLIBNAME): $(LIBSTOBJECTS)
 	$(AR) rcvs $@ $^
 
 # Depencies for non-C sources
-$(MODULE_DIR)/conf-lex.c: $(MODULE_DIR)/conf-lex.l $(MODULE_DIR)/general.h \
-                          $(MODULE_DIR)/data.h $(MODULE_DIR)/conf-parse.h
-$(MODULE_DIR)/conf-parse.c: $(MODULE_DIR)/conf-parse.y $(MODULE_DIR)/general.h \
-                            $(MODULE_DIR)/data.h
-$(MODULE_DIR)/conf-parse.h: $(MODULE_DIR)/conf-parse.c
+$(MODULE_DIR)/conf-lex.ad: $(MODULE_DIR)/conf-parse.c
+$(MODULE_DIR)/conf-lex.ld: $(MODULE_DIR)/conf-parse.c
 
 # Include all dependency files
 INCLUDEFILES += $(LIBSHOBJECTS:.lo=.ld) $(LIBSTOBJECTS:.ao=.ad)
