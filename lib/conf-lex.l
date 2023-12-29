@@ -55,6 +55,7 @@ int sensors_yylineno;
 %option nodefault
 %option noyywrap
 %option nounput
+%option noinput
 
  /* All states are exclusive */
 

@@ -94,20 +94,6 @@ $(MODULE_DIR)/conf-parse.h: $(MODULE_DIR)/conf-parse.c
 # Include all dependency files
 INCLUDEFILES += $(LIBSHOBJECTS:.lo=.ld) $(LIBSTOBJECTS:.ao=.ad)
 
-# Special warning prevention for flex-generated files
-FLEXNOWARN:=-Wno-shadow -Wno-undef -Wno-unused -Wno-missing-prototypes -Wno-sign-compare
-$(MODULE_DIR)/conf-lex.ao: $(MODULE_DIR)/conf-lex.c
-	$(CC) $(ARCPPFLAGS) $(ARCFLAGS) $(FLEXNOWARN) -c $< -o $@
-$(MODULE_DIR)/conf-lex.lo: $(MODULE_DIR)/conf-lex.c
-	$(CC) $(LIBCPPFLAGS) $(LIBCFLAGS) $(FLEXNOWARN) -c $< -o $@
-
-# Special warning prevention for bison-generated files
-YACCNOWARN:=-Wno-undef
-$(MODULE_DIR)/conf-parse.ao: $(MODULE_DIR)/conf-parse.c
-	$(CC) $(ARCPPFLAGS) $(ARCFLAGS) $(YACCNOWARN) -c $< -o $@
-$(MODULE_DIR)/conf-parse.lo: $(MODULE_DIR)/conf-parse.c
-	$(CC) $(LIBCPPFLAGS) $(LIBCFLAGS) $(YACCNOWARN) -c $< -o $@
-
 REMOVELIBST := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(LIBDIR)/%,$(LIB_DIR)/$(LIBSTLIBNAME))
 REMOVELIBSH := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(LIBDIR)/%,$(LIB_DIR)/$(LIBSHLIBNAME))
 REMOVELNSO  := $(DESTDIR)$(LIBDIR)/$(LIBSHSONAME)
