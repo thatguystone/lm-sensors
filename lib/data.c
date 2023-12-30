@@ -84,6 +84,7 @@ int sensors_parse_chip_name(const char *name, sensors_chip_name *res)
 {
 	char *dash;
 
+	memset(res, 0, sizeof(*res));
 	/* First, the prefix. It's either "*" or a real chip name. */
 	if (!strncmp(name, "*-", 2)) {
 		res->prefix = SENSORS_CHIP_NAME_PREFIX_ANY;
