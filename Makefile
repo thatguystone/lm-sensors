@@ -292,9 +292,9 @@ manhtml:
 	$(BISON) -p sensors_yy -d $< -o $@
 
 ifeq ($(DEBUG),1)
-FLEX_FLAGS := -Psensors_yy -t -b -Cfe -8
+FLEX_FLAGS := -Psensors_yy -b -Cfe -8
 else
-FLEX_FLAGS := -Psensors_yy -t -Cfe -8
+FLEX_FLAGS := -Psensors_yy -Cfe -8
 endif
 
 %.c: %.l
@@ -302,4 +302,4 @@ endif
 		echo "Please install $(FLEX), then run \"make clean\" and try again" ; \
 		false ; \
 	fi
-	$(FLEX) $(FLEX_FLAGS) $< > $@
+	$(FLEX) $(FLEX_FLAGS) -o $@ $<
