@@ -85,6 +85,8 @@ $(MODULE_DIR)/$(LIBSTLIBNAME): $(LIBSTOBJECTS)
 	$(AR) rcvs $@ $^
 
 # Depencies for non-C sources
+$(MODULE_DIR)/conf-lex.c: Makefile $(MODULE_DIR)/Module.mk
+$(MODULE_DIR)/conf-parse.c: Makefile $(MODULE_DIR)/Module.mk
 $(MODULE_DIR)/conf-lex.ad: $(MODULE_DIR)/conf-parse.c
 $(MODULE_DIR)/conf-lex.ld: $(MODULE_DIR)/conf-parse.c
 
