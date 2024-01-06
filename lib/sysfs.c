@@ -169,20 +169,7 @@ int get_type_scaling(sensors_subfeature_type type)
 	return 1;
 }
 
-static sensors_quantity none = {"", ""};
-static sensors_quantity bool = {"boolean", ""};
-static sensors_quantity voltage = {"voltage", "V"};
-static sensors_quantity rpm = {"rotation speed", "RPM"};
-static sensors_quantity temperature = {"temperature", "°C"};
-static sensors_quantity power = {"power", "W"};
-static sensors_quantity interval = {"time interval", "s"};
-static sensors_quantity energy = {"energy", "J"};
-static sensors_quantity current = {"electric current", "A"};
-static sensors_quantity humidity = {"humidity", "%RH"};
-static sensors_quantity pwm = {"pwm", "%"};
-static sensors_quantity freq = {"frequency", "Hz"};
-
-const sensors_quantity* sensors_get_quantity(sensors_subfeature_type type)
+sensors_quantity sensors_get_subfeature_quantity(sensors_subfeature_type type)
 {
 	/* Second class subfeatures
 	   that need their own handling */
@@ -192,11 +179,11 @@ const sensors_quantity* sensors_get_quantity(sensors_subfeature_type type)
 		case SENSORS_SUBFEATURE_TEMP_TYPE:
 		case SENSORS_SUBFEATURE_TEMP_OFFSET:
 		case SENSORS_SUBFEATURE_PWM_MODE:
-			return &none;
+			return SENSORS_QUANTITY_NONE;
 		case SENSORS_SUBFEATURE_POWER_AVERAGE_INTERVAL:
-			return &interval;
+			return SENSORS_QUANTITY_INTERVAL;
 		case SENSORS_SUBFEATURE_PWM_FREQ:
-			return &freq;
+			return SENSORS_QUANTITY_FREQ;
 		default:
 			break;
 	}
@@ -211,29 +198,62 @@ const sensors_quantity* sensors_get_quantity(sensors_subfeature_type type)
 		case SENSORS_SUBFEATURE_PWM_ENABLE:
 		case SENSORS_SUBFEATURE_INTRUSION_ALARM:
 		case SENSORS_SUBFEATURE_BEEP_ENABLE:
-			return &bool;
+			return SENSORS_QUANTITY_BOOL;
 		case SENSORS_SUBFEATURE_VID: /* reported in mV and scaled */
 		case SENSORS_SUBFEATURE_IN_INPUT:
-			return &voltage;
+			return SENSORS_QUANTITY_VOLTAGE;
 		case SENSORS_SUBFEATURE_FAN_INPUT:
-			return &rpm;
+			return SENSORS_QUANTITY_RPM;
 		case SENSORS_SUBFEATURE_TEMP_INPUT:
-			return &temperature;
+			return SENSORS_QUANTITY_TEMP;
 		case SENSORS_SUBFEATURE_POWER_AVERAGE:
-			return &power;
+			return SENSORS_QUANTITY_POWER;
 		case SENSORS_SUBFEATURE_ENERGY_INPUT:
-			return &energy;
+			return SENSORS_QUANTITY_ENERGY;
 		case SENSORS_SUBFEATURE_CURR_INPUT:
-			return &current;
+			return SENSORS_QUANTITY_CURRENT;
 		case SENSORS_SUBFEATURE_HUMIDITY_INPUT:
-			return &humidity;
+			return SENSORS_QUANTITY_VOLTAGE;
 		case SENSORS_SUBFEATURE_PWM_IO:
-			return &pwm;
+			return SENSORS_QUANTITY_PWM;
 		case SENSORS_SUBFEATURE_FREQ_INPUT:
-			return &freq;
+			return SENSORS_QUANTITY_FREQ;
 	}
 
-	return &none;
+	return SENSORS_QUANTITY_UNKNOWN;
+}
+
+static struct {
+	const char * name;
+	const char * unit;
+} quantity_names[SENSORS_QUANTITY_MAX + 1] = {
+	{"", ""},
+	{"", ""},
+	{"boolean", ""},
+	{"voltage", "V"},
+	{"rotation speed", "RPM"},
+	{"temperature", "°C"},
+	{"power", "W"},
+	{"time interval", "s"},
+	{"energy", "J"},
+	{"electric current", "A"},
+	{"humidity", "%RH"},
+	{"pwm", "%"},
+	{"frequency", "Hz"},
+};
+
+const char *sensors_get_quantity_name(sensors_quantity quant)
+{
+	if (quant > SENSORS_QUANTITY_MAX)
+		return NULL;
+	return quantity_names[quant].name;
+}
+
+const char *sensors_get_quantity_unit(sensors_quantity quant)
+{
+	if (quant > SENSORS_QUANTITY_MAX)
+		return NULL;
+	return quantity_names[quant].unit;
 }
 
 static

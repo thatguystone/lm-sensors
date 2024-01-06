@@ -16,7 +16,9 @@ global:
   sensors_set_value;
   sensors_snprintf_chip_name;
   sensors_temp_type_name;
-  sensors_get_quantity;
+  sensors_get_subfeature_quantity;
+  sensors_get_quantity_name;
+  sensors_get_quantity_unit;
   sensors_strerror;
   sensors_parse_error;
   sensors_parse_error_wfn;

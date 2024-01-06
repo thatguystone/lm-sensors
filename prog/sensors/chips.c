@@ -60,7 +60,7 @@ void print_chip_raw(const sensors_chip_name *name)
 		b = 0;
 		while ((sub = sensors_get_all_subfeatures(name, feature, &b))) {
 			if (sub->flags & SENSORS_MODE_R) {
-				is_temp = !strcmp("°C", sensors_get_quantity(sub->type)->unit);
+				is_temp = sensors_get_subfeature_quantity(sub->type) == SENSORS_QUANTITY_TEMP;
 
 				if ((err = sensors_get_value(name, sub->number,
 							     &val)))
@@ -121,7 +121,7 @@ void print_chip_json(const sensors_chip_name *name)
 				}
 			}
 			if (sub->flags & SENSORS_MODE_R) {
-				is_temp = !strcmp("°C", sensors_get_quantity(sub->type)->unit);
+				is_temp = sensors_get_subfeature_quantity(sub->type) == SENSORS_QUANTITY_TEMP;
 
 				if ((err = sensors_get_value(name, sub->number,
 							     &val))) {
@@ -135,8 +135,8 @@ void print_chip_json(const sensors_chip_name *name)
 					if (is_temp && fahrenheit)
 						val = deg_ctof(val);
 					if (new_json) {
-						const char *unit = sensors_get_quantity(sub->type)->unit;
-						const char *quantity = sensors_get_quantity(sub->type)->quantity;
+						const char *unit = sensors_get_quantity_unit(sensors_get_subfeature_quantity(sub->type));
+						const char *quantity = sensors_get_quantity_name(sensors_get_subfeature_quantity(sub->type));
 						int quaCnt = 0;
 
 						printf("\"%s\":{", fname);

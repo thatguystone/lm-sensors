@@ -269,12 +269,26 @@ typedef enum sensors_subfeature_type {
 	SENSORS_SUBFEATURE_UNKNOWN = INT_MAX,
 } sensors_subfeature_type;
 
-typedef struct sensors_quantity {
-	const char * quantity;
-	const char * unit;
+typedef enum sensors_quantity {
+	SENSORS_QUANTITY_UNKNOWN,
+	SENSORS_QUANTITY_NONE,
+	SENSORS_QUANTITY_BOOL,
+	SENSORS_QUANTITY_VOLTAGE,
+	SENSORS_QUANTITY_RPM,
+	SENSORS_QUANTITY_TEMP,
+	SENSORS_QUANTITY_POWER,
+	SENSORS_QUANTITY_INTERVAL,
+	SENSORS_QUANTITY_ENERGY,
+	SENSORS_QUANTITY_CURRENT,
+	SENSORS_QUANTITY_HUMIDITY,
+	SENSORS_QUANTITY_PWM,
+	SENSORS_QUANTITY_FREQ,
+	SENSORS_QUANTITY_MAX = SENSORS_QUANTITY_FREQ,
 } sensors_quantity;
 
-const sensors_quantity *sensors_get_quantity(sensors_subfeature_type) __attribute__ ((const));
+sensors_quantity sensors_get_subfeature_quantity(sensors_subfeature_type) __attribute__ ((const));
+const char * sensors_get_quantity_name(sensors_quantity) __attribute__ ((const));
+const char * sensors_get_quantity_unit(sensors_quantity) __attribute__ ((const));
 
 typedef enum sensors_temp_type {
 	SENSORS_TEMP_DISABLED,
