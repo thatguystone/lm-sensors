@@ -136,7 +136,7 @@ static int sysfs_foreach_busdev(const char *bus_type,
 
 /****************************************************************************/
 
-char sensors_sysfs_mount[NAME_MAX];
+const char *sensors_sysfs_mount = "/sys";
 
 static
 int get_type_scaling(sensors_subfeature_type type)
@@ -730,12 +730,35 @@ exit_free:
 int sensors_init_sysfs(void)
 {
 	struct statfs statfsbuf;
+	struct stat statbuf;
+	const char *sysfs_root_env = getenv("SENSORS_SYSFS_ROOT");
+	const char *hwmon_subdir = "/class/hwmon";
+	char *hwmon_path;
+	size_t length;
+	int result;
 
-	snprintf(sensors_sysfs_mount, NAME_MAX, "%s", "/sys");
+	if (sysfs_root_env)
+		sensors_sysfs_mount = sysfs_root_env;
+
 	if (statfs(sensors_sysfs_mount, &statfsbuf) < 0
-	 || statfsbuf.f_type != SYSFS_MAGIC)
+	 || statfsbuf.f_type != SYSFS_MAGIC) {
+		if (sysfs_root_env)
+			fprintf(stderr, "%s: Not a sysfs mount.\n", sensors_sysfs_mount);
+		else
+			return 0;
+	}
+
+	length = strlen(sensors_sysfs_mount) + strlen(hwmon_subdir) + 1;
+	hwmon_path = malloc(length);
+	if (!hwmon_path)
 		return 0;
 
+	snprintf(hwmon_path, length, "%s%s", sensors_sysfs_mount, hwmon_subdir);
+	result = !stat(hwmon_path, &statbuf) && ((statbuf.st_mode & S_IFMT) == S_IFDIR);
+	if (!result)
+		fprintf(stderr, "%s: No sensors at %s.\n", sensors_sysfs_mount, hwmon_path);
+
+	free(hwmon_path);
 	return 1;
 }
 
