@@ -168,7 +168,7 @@ char *sensors_get_label(const sensors_chip_name *name,
 {
 	char *label;
 	const sensors_chip *chip;
-	char buf[PATH_MAX];
+	char buf[PATH_MAX + 1] = {0};
 	FILE *f;
 	int i;
 
@@ -183,12 +183,14 @@ char *sensors_get_label(const sensors_chip_name *name,
 			}
 
 	/* No user specified label, check for a _label sysfs file */
-	snprintf(buf, PATH_MAX, "%s/%s_label", name->path, feature->name);
-	
+	snprintf(buf, sizeof(buf) - 1, "%s/%s_label", name->path, feature->name);
+
 	if ((f = fopen(buf, "r"))) {
-		i = fread(buf, 1, sizeof(buf), f);
+		i = fread(buf, 1, sizeof(buf) - 1, f);
 		fclose(f);
 		if (i > 0) {
+			buf[i] = 0; /* terminate string */
+			i = strlen(buf); /* strip trailing zeroes */
 			/* i - 1 to strip the '\n' at the end */
 			buf[i - 1] = 0;
 			label = buf;
