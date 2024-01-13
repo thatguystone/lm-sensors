@@ -1,5 +1,13 @@
 lm-sensors CHANGES file
 -----------------------
+3.6.2 (2024-01-13)
+  Move pwm scaling factor from sensors to libsensors
+  Add quantity and unit information for sensors
+  Add SENSORS_SYSFS_ROOT for reading data from different location
+  sensors: Add new json format with extra information
+  Update service files: Include hardening patches
+                        Add extra sensord arguments from the environemnt
+                        Fix /run support
 
 3.6.1 (2023-12-24)
   configs: Added a number of new configuration files
