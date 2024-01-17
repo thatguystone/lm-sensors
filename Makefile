@@ -115,7 +115,7 @@ BUILD_SHARED_LIB := 1
 # to do this.
 
 # The subdirectories we need to build things in
-SRCDIRS := lib prog/detect prog/pwm \
+SRCDIRS := lib prog/debug prog/detect prog/pwm \
            prog/sensors ${PROG_EXTRA:%=prog/%} etc
 # Only build isadump and isaset on x86 machines.
 ifneq (,$(findstring $(ARCH), i386 i486 i586 i686 x86_64))
