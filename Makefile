@@ -197,7 +197,12 @@ MANPAGES := $(LIBMAN3FILES) $(LIBMAN5FILES) $(PROGDETECTMAN8FILES) $(PROGDUMPMAN
 
 check:: test
 
-test:: lib/test/test-scanner
+test:: shellcheck test-lib
+
+shellcheck::
+	shellcheck $(SHELLCHECKFILES)
+
+test-lib:: lib/test/test-scanner
 	cd lib/test ; ./test-scanner.pl
 
 user ::
