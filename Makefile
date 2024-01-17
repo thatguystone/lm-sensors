@@ -197,13 +197,17 @@ MANPAGES := $(LIBMAN3FILES) $(LIBMAN5FILES) $(PROGDETECTMAN8FILES) $(PROGDUMPMAN
 
 check:: test
 
-test:: shellcheck test-lib
+test:: shellcheck test-sensors test-lib
 
 shellcheck::
 	shellcheck $(SHELLCHECKFILES)
 
 test-lib:: lib/test/test-scanner
 	cd lib/test ; ./test-scanner.pl
+
+test-sensors:: prog/sensors/sensors
+	LD_LIBRARY_PATH=lib SENSORS_SYSFS_ROOT=prog/sensors/test/data/laptop prog/sensors/sensors -J | jq -S | diff -u prog/sensors/test/data/laptop.json -
+	LD_LIBRARY_PATH=lib SENSORS_SYSFS_ROOT=prog/sensors/test/data/laptop prog/sensors/sensors -J -f | jq -S | diff -u prog/sensors/test/data/laptop.f.json -
 
 user ::
 user_install::
